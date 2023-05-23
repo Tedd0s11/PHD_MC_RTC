@@ -13,6 +13,7 @@ roslaunch mc_rtc_ticker display.launch
 ```
 4. In anthoer terminal, build the program :
 ```
+mkdir -p build
 cd PHD_MC_RTC/build
 cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo
 make
@@ -23,3 +24,7 @@ sudo make install
 source /opt/ros/noetic/setup.bash #Or setup.zsh
 rosrun mc_rtc_ticker mc_rtc_ticker
 ```
+## What about this verison 
+This was my first attempt to solve the test where I used EndEffector Task.\
+Later I see how to use bspline method and then create another version.\
+For the science I left this version which "work" quite a bit
