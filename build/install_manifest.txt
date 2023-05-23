@@ -1,5 +1,0 @@
-/usr/lib/x86_64-linux-gnu/mc_controller/etc/Phd_Controller.yaml
-/usr/lib/x86_64-linux-gnu/libTest.so
-/usr/lib/x86_64-linux-gnu/mc_controller/Test_controller.so
-/usr/lib/x86_64-linux-gnu/mc_controller/Test/states/Phd_Controller_Initial.so
-/usr/lib/x86_64-linux-gnu/mc_controller/Test/states/data/states.json
