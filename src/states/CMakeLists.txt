@@ -1,3 +1,0 @@
-add_fsm_state_simple(Phd_Controller_Initial)
-
-add_fsm_data_directory(data)
