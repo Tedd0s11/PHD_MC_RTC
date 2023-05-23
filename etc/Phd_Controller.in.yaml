@@ -74,11 +74,12 @@ states:
     base: MetaTasks
     tasks:
       MoveLeftHandTarget:
-        type: body6d
+        type: bspline_trajectory
         frame: l_wrist
         activeJoints: [L_SHOULDER_P, L_SHOULDER_R, L_ELBOW_P,L_ELBOW_Y,L_WRIST_R,L_WRIST_Y]
-        oritentation: [0.7, 0.0, 0.7,0.0]
-        position: [0.5, 0.25, 1.1]
+        target:
+          rotation: [0.7, 0.0, 0.7,0.0]
+          translation: [0.5, 0.25, 1.1]
         completion:
           OR:
             - eval: 0.001
@@ -88,11 +89,12 @@ states:
     base: MetaTasks
     tasks:
       MoveLeftHandInital:
-        type: body6d
+        type: bspline_trajectory
         frame: l_wrist
         activeJoints: [L_SHOULDER_P, L_SHOULDER_R, L_ELBOW_P,L_ELBOW_Y,L_WRIST_R,L_WRIST_Y]
-        oritentation: [0.97, 0.08, -0.21, -0.02]
-        position: [0.12, 0.32, 0.83]
+        target:
+          rotation: [0.97, 0.08, -0.21, -0.02]
+          translation: [0.12, 0.32, 0.83]
         completion:
           OR:
             - eval: 0.001
@@ -111,11 +113,12 @@ states:
     base: MetaTasks
     tasks:
       MoveRightHandTarget:
-        type: body6d
+        type: bspline_trajectory
         frame: r_wrist
         activeJoints: [R_SHOULDER_P, R_SHOULDER_R, R_ELBOW_P,R_ELBOW_Y,R_WRIST_R,R_WRIST_Y]
-        oritentation: [0.7, 0.0, 0.7,0.0]
-        position: [0.5, -0.25, 1.1]
+        target:
+          rotation: [0.7, 0.0, 0.7,0.0]
+          translation: [0.5, -0.25, 1.1]
         completion:
           OR:
             - eval: 0.001
@@ -125,11 +128,12 @@ states:
     base: MetaTasks
     tasks:
       MoveRightHandInital:
-        type: body6d
+        type: bspline_trajectory
         frame: r_wrist
         activeJoints: [R_SHOULDER_P, R_SHOULDER_R, R_ELBOW_P,R_ELBOW_Y,R_WRIST_R,R_WRIST_Y]
-        oritentation: [0.97, -0.08, -0.21, 0.02]
-        position: [0.12, -0.32, 0.83]
+        target:
+          rotation: [0.97, -0.08, -0.21, 0.02]
+          translation: [0.12, -0.32, 0.83]
         completion:
           OR:
             - eval: 0.001
@@ -178,11 +182,12 @@ states:
     base: MetaTasks
     tasks:
       MoveHeadInit:
-        type: body6d
+        type: bspline_trajectory
         frame: dcamera
         activeJoints: [NECK_Y, NECK_P]
-        oritentation: [-0.31, 0.64, -0.63, 0.31]
-        position: [0.189, 0.00, 1.50]
+        target:
+          rotation: [-0.31, -0.63, 0.63, -0.31]
+          translation: [0.166, 0.00, 1.50]
         completion:
           OR:
             - eval: 0.001
