@@ -1,0 +1,220 @@
+---
+# If true, the FSM transitions are managed by an external tool
+Managed: false
+# If true and the FSM is self-managed, transitions should be triggered
+StepByStep: true
+# Change idle behaviour, if true the state is kept until transition,
+# otherwise the FSM holds the last state until transition
+IdleKeepState: false
+# Where to look for state libraries
+StatesLibraries:
+- "/usr/lib/x86_64-linux-gnu/mc_controller/fsm/states"
+- "/usr/lib/x86_64-linux-gnu/mc_controller/Test/states"
+# Where to look for state files
+StatesFiles:
+- "/usr/lib/x86_64-linux-gnu/mc_controller/fsm/states/data"
+- "/usr/lib/x86_64-linux-gnu/mc_controller/Test/states/data"
+# If true, state factory will be more verbose
+VerboseStateFactory: false
+# Additional robots to load
+robots:
+  ground:
+    module: env/ground
+    
+# General constraints, always on
+constraints:
+- type: contact
+- type: dynamics
+  damper: [0.1, 0.01, 0.5]
+- type: compoundJoint
+
+# Collision constraint
+collisions:
+- type: collision
+  useMinimal: true
+  useCommon: true
+  
+# Initial set of contacts
+contacts:
+- r2: ground
+  r1Surface: LeftFoot
+  r2Surface: AllGround
+- r2: ground
+  r1Surface: RightFoot
+  r2Surface: AllGround
+
+# Some options for a specific robot
+jvrc1:
+  posture:
+    stiffness: 1
+    weight: 10
+  ff:
+    stiffness: 2
+    weight: 100
+# Implement some additional text states
+states:
+
+  # Standing allow to not fell during the whole process  
+  Standing:
+    base: MetaTasks
+    tasks:
+      CoM:
+        type: com
+        above: [LeftFoot, RightFoot]
+        weight: 2000
+        stiffness: 5
+      KeepChest:
+        type: orientation
+        body: WAIST_R_S
+        weight: 100
+        stiffness: 1
+       
+  # All task for the Left Hand 
+  MoveLeftHand:
+    base: MetaTasks
+    tasks:
+      MoveLeftHandTarget:
+        type: body6d
+        frame: l_wrist
+        activeJoints: [L_SHOULDER_P, L_SHOULDER_R, L_ELBOW_P,L_ELBOW_Y,L_WRIST_R,L_WRIST_Y]
+        oritentation: [0.7, 0.0, 0.7,0.0]
+        position: [0.5, 0.25, 1.1]
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0
+
+  BackLeftHand:
+    base: MetaTasks
+    tasks:
+      MoveLeftHandInital:
+        type: body6d
+        frame: l_wrist
+        activeJoints: [L_SHOULDER_P, L_SHOULDER_R, L_ELBOW_P,L_ELBOW_Y,L_WRIST_R,L_WRIST_Y]
+        oritentation: [0.97, 0.08, -0.21, -0.02]
+        position: [0.12, 0.32, 0.83]
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0   
+            
+  MoveLeft:
+    base: Parallel
+    states: [MoveLeftHand, MoveHeadLeft]
+    
+  MoveBackLH:
+    base: Parallel
+    states: [MoveHeadInit, BackLeftHand]
+
+  # All tasks for the Right Hand
+  MoveRightHand:
+    base: MetaTasks
+    tasks:
+      MoveRightHandTarget:
+        type: body6d
+        frame: r_wrist
+        activeJoints: [R_SHOULDER_P, R_SHOULDER_R, R_ELBOW_P,R_ELBOW_Y,R_WRIST_R,R_WRIST_Y]
+        oritentation: [0.7, 0.0, 0.7,0.0]
+        position: [0.5, -0.25, 1.1]
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0 
+
+  BackRightHand:
+    base: MetaTasks
+    tasks:
+      MoveRightHandInital:
+        type: body6d
+        frame: r_wrist
+        activeJoints: [R_SHOULDER_P, R_SHOULDER_R, R_ELBOW_P,R_ELBOW_Y,R_WRIST_R,R_WRIST_Y]
+        oritentation: [0.97, -0.08, -0.21, 0.02]
+        position: [0.12, -0.32, 0.83]
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0  
+  
+  MoveRight:
+    base: Parallel
+    states: [MoveRightHand, MoveHeadRight]
+    
+  MoveBackRH:
+    base: Parallel
+    states: [MoveHeadInit, BackRightHand]
+  
+  # All tasks for the Head          
+  MoveHeadLeft:
+    base: MetaTasks
+    tasks:
+      MoveHeadLeft:
+        type: lookAtFrame
+        frame: ranger
+        activeJoints : [NECK_Y, NECK_P]
+        frameVector: [1,0,0]
+        target:
+          frame: l_wrist 
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0 
+          
+  MoveHeadRight:
+    base: MetaTasks
+    tasks:
+      MoveHeadRight:
+        type: lookAtFrame
+        frame: ranger
+        activeJoints : [NECK_Y, NECK_P]
+        frameVector: [1,0,0]
+        target:
+          frame: r_wrist 
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0 
+                  
+  MoveHeadInit:
+    base: MetaTasks
+    tasks:
+      MoveHeadInit:
+        type: body6d
+        frame: dcamera
+        activeJoints: [NECK_Y, NECK_P]
+        oritentation: [1.0, 1.0, 1.0]
+        position: [0.13, 0.01, 1.43]
+        completion:
+          OR:
+            - eval: 0.05
+            - timeout: 10.0 
+
+  #All Tasks for Both Hands          
+  MoveBothHands:
+    base: Parallel
+    states: [MoveRightHand, MoveLeftHand]
+    
+  BackBothHands:
+    base: Parallel
+    states: [BackRightHand, BackLeftHand]
+    
+  # Controller routine      
+  Routine:
+    base: Meta
+    Managed: false
+    StepByStep: true
+    transitions:
+      - [MoveLeft, OK, MoveBackLH, Auto]
+      - [MoveBackLH, OK, MoveRight, Auto]
+      - [MoveRight, OK, MoveBackRH, Auto]
+      - [MoveBackRH, OK, MoveBothHands, Auto]
+      - [MoveBothHands, OK, BackBothHands, Auto]
+      
+  Phd_Controller:
+    base: Parallel
+    states: [Standing, Routine]
+     
+# Transitions map
+transitions:
+- [Phd_Controller, OK, Phd_Controller, Strict]
+# Initial state
+init: Phd_Controller

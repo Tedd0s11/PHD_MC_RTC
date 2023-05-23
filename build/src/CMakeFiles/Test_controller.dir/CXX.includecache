@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/teddy/Desktop/Phd_Controller/src/Phd_Controller.h
+mc_control/mc_controller.h
+-
+mc_control/fsm/Controller.h
+-
+api.h
+/home/teddy/Desktop/Phd_Controller/src/api.h
+
+/home/teddy/Desktop/Phd_Controller/src/api.h
+
+/home/teddy/Desktop/Phd_Controller/src/lib.cpp
+Phd_Controller.h
+/home/teddy/Desktop/Phd_Controller/src/Phd_Controller.h
+
