@@ -2,7 +2,7 @@
 # If true, the FSM transitions are managed by an external tool
 Managed: false
 # If true and the FSM is self-managed, transitions should be triggered
-StepByStep: true
+StepByStep: false
 # Change idle behaviour, if true the state is kept until transition,
 # otherwise the FSM holds the last state until transition
 IdleKeepState: false
@@ -81,7 +81,7 @@ states:
         position: [0.5, 0.25, 1.1]
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0
 
   BackLeftHand:
@@ -95,7 +95,7 @@ states:
         position: [0.12, 0.32, 0.83]
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0   
             
   MoveLeft:
@@ -118,7 +118,7 @@ states:
         position: [0.5, -0.25, 1.1]
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0 
 
   BackRightHand:
@@ -132,7 +132,7 @@ states:
         position: [0.12, -0.32, 0.83]
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0  
   
   MoveRight:
@@ -156,7 +156,7 @@ states:
           frame: l_wrist 
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0 
           
   MoveHeadRight:
@@ -164,14 +164,14 @@ states:
     tasks:
       MoveHeadRight:
         type: lookAtFrame
-        frame: ranger
+        frame: dcamera
         activeJoints : [NECK_Y, NECK_P]
-        frameVector: [1,0,0]
+        frameVector: [0,0,1]
         target:
           frame: r_wrist 
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0 
                   
   MoveHeadInit:
@@ -181,11 +181,11 @@ states:
         type: body6d
         frame: dcamera
         activeJoints: [NECK_Y, NECK_P]
-        oritentation: [1.0, 1.0, 1.0]
-        position: [0.13, 0.01, 1.43]
+        oritentation: [-0.31, 0.64, -0.63, 0.31]
+        position: [0.189, 0.00, 1.50]
         completion:
           OR:
-            - eval: 0.05
+            - eval: 0.001
             - timeout: 10.0 
 
   #All Tasks for Both Hands          
